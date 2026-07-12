@@ -6,9 +6,9 @@ Proofpass is a **digital credential passport** built on the Cardano blockchain. 
 
 ## 👥 Team Members
 
-* **Chetan**
-* **Yekeshwar**
-
+* **Nanduri Chetan**
+* **Vankodvath Yekeshwar**
+* **Nanduri Adithya**
 ---
 
 ## 🔴 The Problem
