@@ -1,0 +1,50 @@
+// ProofPass — Database Schema
+// Using SQLite for local development (swap to PostgreSQL via DATABASE_URL)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Organization {
+  id            String       @id @default(cuid())
+  name          String
+  walletAddress String       @unique
+  logo          String?
+  description   String?
+  website       String?
+  credentials   Credential[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+model Credential {
+  id               String           @id @default(cuid())
+  shortCode        String           @unique // e.g., "8FH2KS9" for /verify/:shortCode
+  recipientName    String
+  recipientEmail   String?
+  course           String?
+  achievement      String?
+  skills           String           @default("[]") // JSON array stored as string (SQLite)
+  issueDate        DateTime
+  duration         String?
+  certificateHash  String           // SHA-256 of original PDF
+  pdfIpfsCid       String?          // Pinata CID
+  pdfIpfsUrl       String?          // Gateway URL
+  txHash           String?          // Cardano tx hash
+  policyId         String?          // Minting policy ID
+  assetName        String?          // On-chain asset name
+  status           String           @default("PENDING") // PENDING | MINTED | REVOKED
+  organizationId   String
+  organization     Organization     @relation(fields: [organizationId], references: [id])
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  @@index([certificateHash])
+  @@index([organizationId])
+  @@index([status])
+}
